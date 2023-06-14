@@ -1,4 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using WebApiRestProductApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseSqlServer(connectionString)
+); 
+
+//Add connection
 
 // Add services to the container.
 
