@@ -12,7 +12,33 @@ namespace WebApiRestProductApp.Data
         }
         
         public DbSet<Product> Products { get; set; }
-    
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().HasData(
+
+                new Product
+                {
+
+                    Id = Guid.NewGuid(),
+                    Name = "iPhone 14 Pro max",
+                    Category = "Phone",
+                    ReleaseDate = DateTime.Today,
+                    Price = 1299.99
+                },
+                new Product
+                {
+
+                    Id = Guid.NewGuid(),
+                    Name = "Samsung S23 Ultra",
+                    Category = "Phone",
+                    ReleaseDate = DateTime.Today,
+                    Price = 999.99
+                }
+
+            );
+        }
+
     }
     
 }
