@@ -17,7 +17,8 @@ namespace WebApiRestProductApp.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -33,8 +34,8 @@ namespace WebApiRestProductApp.Migrations
                 columns: new[] { "Id", "Category", "Name", "Price", "ReleaseDate" },
                 values: new object[,]
                 {
-                    { new Guid("6f05804f-69f1-40df-a0bf-fa6e1384cc95"), "Phone", "iPhone 14 Pro max", 1299.99, new DateTime(2023, 6, 14, 0, 0, 0, 0, DateTimeKind.Local) },
-                    { new Guid("9bbb269d-1693-4db2-8229-ce1032ec8e65"), "Phone", "Samsung S23 Ultra", 999.99000000000001, new DateTime(2023, 6, 14, 0, 0, 0, 0, DateTimeKind.Local) }
+                    { 1, "Phone", "iPhone 14 Pro max", 1299.99, new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Local) },
+                    { 2, "Phone", "Samsung S23 Ultra", 999.99000000000001, new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Local) }
                 });
         }
 

@@ -19,8 +19,7 @@ namespace WebApiRestProductApp.Data
 
                 new Product
                 {
-
-                    Id = Guid.NewGuid(),
+                    Id = 1,
                     Name = "iPhone 14 Pro max",
                     Category = "Phone",
                     ReleaseDate = DateTime.Today,
@@ -28,8 +27,7 @@ namespace WebApiRestProductApp.Data
                 },
                 new Product
                 {
-
-                    Id = Guid.NewGuid(),
+                    Id = 2,
                     Name = "Samsung S23 Ultra",
                     Category = "Phone",
                     ReleaseDate = DateTime.Today,

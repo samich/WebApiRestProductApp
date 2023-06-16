@@ -24,9 +24,11 @@ namespace WebApiRestProductApp.Migrations
 
             modelBuilder.Entity("WebApiRestProductApp.Models.Product", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -49,19 +51,19 @@ namespace WebApiRestProductApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6f05804f-69f1-40df-a0bf-fa6e1384cc95"),
+                            Id = 1,
                             Category = "Phone",
                             Name = "iPhone 14 Pro max",
                             Price = 1299.99,
-                            ReleaseDate = new DateTime(2023, 6, 14, 0, 0, 0, 0, DateTimeKind.Local)
+                            ReleaseDate = new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
-                            Id = new Guid("9bbb269d-1693-4db2-8229-ce1032ec8e65"),
+                            Id = 2,
                             Category = "Phone",
                             Name = "Samsung S23 Ultra",
                             Price = 999.99000000000001,
-                            ReleaseDate = new DateTime(2023, 6, 14, 0, 0, 0, 0, DateTimeKind.Local)
+                            ReleaseDate = new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Local)
                         });
                 });
 #pragma warning restore 612, 618
