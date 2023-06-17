@@ -19,20 +19,32 @@ namespace WebApiRestProductApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> GetProducts(){
+        public ActionResult<IEnumerable<Product>> GetProducts(){
 
             IEnumerable<Product> products = _context.Products;
 
-            return products;        
+            return Ok(products);        
 
         }
 
-        [HttpGet("Id")]
-        public Product GetProduct(int Id) { 
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public ActionResult<Product> GetProduct(int Id) {
+
+            if (Id == 0) {
+                return BadRequest();
+            }
 
             Product product = _context.Products.FirstOrDefault(o => o.Id == Id);
 
-            return product;
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         
         }
 
