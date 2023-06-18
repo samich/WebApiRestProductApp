@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using WebApiRestProductApp.Data;
 using WebApiRestProductApp.Models;
 
@@ -135,6 +137,38 @@ namespace WebApiRestProductApp.Controllers
 
             return NoContent();
 
+        }
+
+        //patch requires JsonPatch and Mvc.NewtonsoftJson
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPatch]
+        public IActionResult UpdatePartialProduct(int id, JsonPatchDocument<Product> patch)
+        { 
+
+            if (id == 0 || patch == null)
+            {
+                return BadRequest();
+            }
+
+            var existingProduct = _context.Products.FirstOrDefault(p => p.Id == id);
+
+            if (existingProduct == null)
+            { 
+                return NotFound();            
+            }
+
+            //store errors in ModelState
+            patch.ApplyTo(existingProduct, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            _context.SaveChanges();
+
+            return NoContent();        
         }
 
     }
