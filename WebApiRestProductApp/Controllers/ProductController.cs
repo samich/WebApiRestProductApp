@@ -19,16 +19,16 @@ namespace WebApiRestProductApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetProducts(){
+        public ActionResult<IEnumerable<Product>> GetProducts() {
 
             IEnumerable<Product> products = _context.Products;
 
-            return Ok(products);        
+            return Ok(products);
 
         }
 
         //use Name to invoke this method later while creating route
-        [HttpGet("{id:int}", Name ="GetProduct")]
+        [HttpGet("{id:int}", Name = "GetProduct")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,14 +46,14 @@ namespace WebApiRestProductApp.Controllers
             }
 
             return Ok(product);
-        
+
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Product> CreateProduct([FromBody]Product product) {
+        public ActionResult<Product> CreateProduct([FromBody] Product product) {
 
             /*if (!ModelState.IsValid) { 
                 return BadRequest(ModelState);
@@ -83,8 +83,32 @@ namespace WebApiRestProductApp.Controllers
 
             //return url of the new item
             return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
-        
-        }        
+
+        }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("{id:int}")]
+        //IActionResult instead of ActionResult because we dont need to specify return type
+        public IActionResult DeleteProduct(int id) {
+
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+
+            if (product == null) {
+                return NotFound();
+            }
+
+            _context.Products.Remove(product); 
+            _context.SaveChanges();
+
+            return NoContent();
+        }
 
     }
 }
