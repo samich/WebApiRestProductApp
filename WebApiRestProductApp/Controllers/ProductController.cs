@@ -27,7 +27,8 @@ namespace WebApiRestProductApp.Controllers
 
         }
 
-        [HttpGet("{id:int}")]
+        //use Name to invoke this method later while creating route
+        [HttpGet("{id:int}", Name ="GetProduct")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -37,7 +38,7 @@ namespace WebApiRestProductApp.Controllers
                 return BadRequest();
             }
 
-            Product product = _context.Products.FirstOrDefault(o => o.Id == Id);
+            Product product = _context.Products.FirstOrDefault(p => p.Id == Id);
 
             if (product == null)
             {
@@ -49,10 +50,21 @@ namespace WebApiRestProductApp.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Product> CreateProduct([FromBody]Product product) { 
+        public ActionResult<Product> CreateProduct([FromBody]Product product) {
+
+            /*if (!ModelState.IsValid) { 
+                return BadRequest(ModelState);
+            }*/
+
+            //custom validation: check if product name already exists
+            if (_context.Products.FirstOrDefault(p => p.Name.ToLower() == product.Name.ToLower()) != null)
+            {
+                ModelState.AddModelError("", "Product already exists");
+                return BadRequest(ModelState);
+            }
 
             if (product == null) {
                 return BadRequest(product);
@@ -66,8 +78,11 @@ namespace WebApiRestProductApp.Controllers
 
             _context.Products.Add(product);
             _context.SaveChanges();
-            
-            return Ok(product);
+
+            //return Ok(product);
+
+            //return url of the new item
+            return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
         
         }        
 
