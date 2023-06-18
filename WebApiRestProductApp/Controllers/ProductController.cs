@@ -104,10 +104,37 @@ namespace WebApiRestProductApp.Controllers
                 return NotFound();
             }
 
-            _context.Products.Remove(product); 
+            _context.Products.Remove(product);
             _context.SaveChanges();
 
             return NoContent();
+        }
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut]
+        //product object has id but we can get explicitly to double check
+        public IActionResult UpdateProduct(int id, [FromBody] Product product) {
+
+            if (product == null || product.Id != id) 
+            {
+                return BadRequest();            
+            }
+
+            var existingProduct = _context.Products.FirstOrDefault(p => p.Id == id);
+
+            if (existingProduct == null) {
+                return NotFound();
+            }
+
+            existingProduct.Name = product.Name;
+            existingProduct.Category = product.Category;
+            existingProduct.Price = product.Price;
+
+            _context.SaveChanges();
+
+            return NoContent();
+
         }
 
     }
