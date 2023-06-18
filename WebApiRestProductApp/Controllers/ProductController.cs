@@ -48,5 +48,28 @@ namespace WebApiRestProductApp.Controllers
         
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Product> CreateProduct([FromBody]Product product) { 
+
+            if (product == null) {
+                return BadRequest(product);
+            }
+
+            //assume user should not enter any other Id than 0
+            if (product.Id != 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            
+            return Ok(product);
+        
+        }        
+
     }
 }
